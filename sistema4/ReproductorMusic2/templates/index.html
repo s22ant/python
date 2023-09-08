@@ -1,0 +1,53 @@
+{%load static %}
+<link rel ="stylesheet" href="{% static 'css/bootstrap.min.css'%}"> <!-- para llamar a bootstrap -->
+<table class="table table-dark table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Titulo</th>
+        <th scope="col">Autor</th>
+        <th scope="col">Genero</th>
+        <th scope="col">-</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for c in canciones%}
+            <tr>
+                <td>{{c.titulo}}</td>
+                <td>{{c.autor}}</td>
+                <td>
+                    {% for g in generos %}
+                    {% if c.genero_id == g.id %}
+                        {{g.descripcion}}   
+                    {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+
+                    <iframe width="560" height="315" src="{{c.ruta}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </td>
+                <td><button type="button" class="btn btn-light">ver</button></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<hr>
+<h3>Agregar una cancion</h3>
+
+<form method="POST" action="/agregarcancion/">
+    <div class="col-sm-3">
+        {% csrf_token %}
+        <input type="hidden" name="user" value="{{usuario.0.nick}}">
+        <input type="text" name="autor" placeholder="Autor">
+        <input type="text" name="titulo" placeholder="Titulo de la musica">
+        <select class="form-select" name="genero">
+            {% for g in generos %}
+            <option value="{{g.id}}">{{g.descripcion}}</option>
+            {% endfor %}
+        </select>
+        <input type="url" name="ruta" placeholder="Fuente: ">
+        <input type="submit" value="Agregar">
+    </div>
+</form>
+
